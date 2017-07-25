@@ -1,0 +1,31 @@
+(ns extreme-fib.core
+  (:require [clojure.math.numeric-tower :as math])
+  (:gen-class))
+
+(defn fib [n]
+  (loop [a 0N b 1N c n]
+    (if (>= 0 c)
+      a
+      (recur (+ a b) a (dec c)))))
+
+(defn extreme-fib-brute-force
+  ([] (extreme-fib-brute-force 1000 1000000000))
+  ([digit n] (take digit
+                   (str
+                    (fib n)))))
+
+(def fact (memoize (fn [n]
+                     (reduce * (range 1N (inc n))))))
+
+(def p (memoize (fn [n k]
+                  (/ (fact n) (* (fact k) (fact (- n k)))))))
+
+(defn pfib [N]
+  (let [n (dec N) end (math/floor (/ n 2))]
+    (loop [k 0 sum 0N]
+      (if (> k end)
+        sum
+        (recur (inc k) (+ sum (p (- n k) k)))))))
+
+(defn -main
+  [& args])
