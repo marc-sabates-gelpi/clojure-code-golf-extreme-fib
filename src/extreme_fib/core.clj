@@ -3,10 +3,6 @@
   (:gen-class))
 
 ;; Improvements:
-;; * Could fact make the most of memoization and recursive calls or we'll run out of stack space?
-;; * Could be better to have an iterative fact & concurrent loop?
-;; Take a look to this https://stackoverflow.com/questions/1662336/clojure-simple-factorial-causes-stack-overflow#1663053
-;; * Could pfib loop from k=end to k=0 so that it would call fact from 0 to n?
 ;; * Could pfib use concurrent loop?
 
 (defn fib [n]
@@ -37,21 +33,15 @@
         sum
         (recur (dec k) (+ sum (p (- n k) k)))))))
 
-(defn afib [n]
-  (/
-   (-
-    (math/expt
-     (inc
-      (math/sqrt 5))
-     n)
-    (math/expt
-     (-
-      1
-      (math/sqrt 5))
-     n))
-    (*
-     (math/expt 2 n)
-     (math/sqrt 5))))
+(defn bfib [n]
+  "Binet's formula"
+  (/ (- (math/expt (inc (math/sqrt 5)) n) (math/expt (- 1 (math/sqrt 5)) n))
+     (* (math/expt 2 n) (math/sqrt 5))))
+
+(defn ffib [n]
+  "Approximation formula"
+  (* (/ 1 (math/sqrt 5))
+     (math/expt (/ (inc (math/sqrt 5)) 2) (inc n))))
 
 (defn extreme-fib
   ([] (extreme-fib 1000 1000000000))
